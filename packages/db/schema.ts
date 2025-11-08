@@ -686,6 +686,25 @@ export const importSessionBookmarks = sqliteTable(
   ],
 );
 
+export const searchHistory = sqliteTable(
+  "searchHistory",
+  {
+    id: text("id")
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => createId()),
+    searchTerm: text("searchTerm").notNull(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    createdAt: createdAtField(),
+  },
+  (sh) => [
+    index("searchHistory_userId_idx").on(sh.userId),
+    index("searchHistory_createdAt_idx").on(sh.createdAt),
+  ],
+);
+
 // Relations
 
 export const userRelations = relations(users, ({ many, one }) => ({
@@ -696,6 +715,7 @@ export const userRelations = relations(users, ({ many, one }) => ({
   invites: many(invites),
   subscription: one(subscriptions),
   importSessions: many(importSessions),
+  searchHistory: many(searchHistory),
 }));
 
 export const bookmarkRelations = relations(bookmarks, ({ many, one }) => ({
@@ -880,3 +900,10 @@ export const importSessionBookmarksRelations = relations(
     }),
   }),
 );
+
+export const searchHistoryRelations = relations(searchHistory, ({ one }) => ({
+  user: one(users, {
+    fields: [searchHistory.userId],
+    references: [users.id],
+  }),
+}));

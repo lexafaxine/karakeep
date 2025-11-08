@@ -8,10 +8,9 @@ import FullPageSpinner from "@/components/ui/FullPageSpinner";
 import { SearchInput } from "@/components/ui/SearchInput";
 import { Text } from "@/components/ui/Text";
 import { api } from "@/lib/trpc";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { keepPreviousData } from "@tanstack/react-query";
 
-import { useSearchHistory } from "@karakeep/shared-react/hooks/search-history";
+import { useSearchHistoryTRPC } from "@karakeep/shared-react/hooks/search-history-trpc";
 import { useDebounce } from "@karakeep/shared-react/hooks/use-debounce";
 
 const MAX_DISPLAY_SUGGESTIONS = 5;
@@ -23,11 +22,9 @@ export default function Search() {
   const inputRef = useRef<TextInput>(null);
 
   const [isInputFocused, setIsInputFocused] = useState(true);
-  const { history, addTerm, clearHistory } = useSearchHistory({
-    getItem: (k: string) => AsyncStorage.getItem(k),
-    setItem: (k: string, v: string) => AsyncStorage.setItem(k, v),
-    removeItem: (k: string) => AsyncStorage.removeItem(k),
-  });
+  const { history, addTerm, clearHistory } = useSearchHistoryTRPC(
+    api.searchHistory,
+  );
 
   const onRefresh = api.useUtils().bookmarks.searchBookmarks.invalidate;
 

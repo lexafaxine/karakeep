@@ -11,6 +11,7 @@ import { listsAppRouter } from "./lists";
 import { promptsAppRouter } from "./prompts";
 import { publicBookmarks } from "./publicBookmarks";
 import { rulesAppRouter } from "./rules";
+import { searchHistoryAppRouter } from "./searchHistory";
 import { subscriptionsRouter } from "./subscriptions";
 import { tagsAppRouter } from "./tags";
 import { usersAppRouter } from "./users";
@@ -33,6 +34,7 @@ export const appRouter = router({
   invites: invitesAppRouter,
   publicBookmarks: publicBookmarks,
   subscriptions: subscriptionsRouter,
+  searchHistory: searchHistoryAppRouter,
 });
 // export type definition of API
 export type AppRouter = typeof appRouter;
